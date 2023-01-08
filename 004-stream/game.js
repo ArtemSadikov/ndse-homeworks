@@ -2,8 +2,8 @@ const fs = require( 'fs' );
 const path = require( 'path' );
 const readline = require('readline');
 const { question } = require( '../utils/rl-question' );
+const { LOG_FILE_PATH } = require('./constants/log-file-path');
 
-const LOG_FILE_PATH = path.join('log', 'game.log');
 const TITLE_DELIMITER = '№';
 const TAIL_OF_COIN = 0;
 const EAGLE_OF_COIN = 1;
@@ -24,7 +24,7 @@ async function main() {
     const lastBattleNumber = Math.max(...(titles || ['Партия ' + TITLE_DELIMITER + 0]).map(v => Number.parseInt(v.split(TITLE_DELIMITER)[1])))
     const newBattleNumber = lastBattleNumber + 1;
 
-    fs.appendFileSync(LOG_FILE_PATH, 'Партия ' + TITLE_DELIMITER + newBattleNumber + '\n');
+    fs.appendFileSync(LOG_FILE_PATH, 'Партия ' + TITLE_DELIMITER + newBattleNumber + ' -- ');
 
     console.log('Начинаем партию ' + TITLE_DELIMITER + newBattleNumber);
     /** @type {TAIL_OF_COIN | EAGLE_OF_COIN} */
