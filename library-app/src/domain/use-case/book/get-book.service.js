@@ -10,13 +10,7 @@ class GetBookService extends GetBookUseCase {
   }
 
   async getBookByID(id) {
-    const result = await this.#booksRepo.getByID(id);
-
-    if (!result) {
-      throw new Error('Cannot find book with id = ' + id)
-    }
-
-    return result;
+    return this.#booksRepo.getByID(id);
   }
 
   async getBooksList(pagination) {
