@@ -7,6 +7,8 @@ const HTTPApiNotFoundError = require( "../../utils/errors/api-errors/http-api-no
 const HTTPApiBaseError = require( "../../utils/errors/api-errors/http-api-base-error" );
 const HTTPStatusCodes = require( "../../utils/http-status-codes/http-status-codes" );
 const getPagination = require( "../../utils/pagination/pagination" );
+const ValidationError = require( "../../utils/errors/errors/validation.error" );
+const HTTPApiBadRequestError = require( "../../utils/errors/api-errors/http-api-bad-request.error" );
 
 class BooksController {
   #getBooksUseCase = new GetBookUseCase()
@@ -71,8 +73,17 @@ class BooksController {
   }
 
   async createBook(req) {
-    const book = req.body;
-    return this.#createBookUseCase.createBook(book);
+    try {
+      const book = req.body;
+      await this.#createBookUseCase.createBook(book);
+      return 'OK';
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        throw new HTTPApiBadRequestError(err.name, err.message);
+      }
+
+      throw new HTTPApiBaseError(err.name, err.message, HTTPStatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 }
 
