@@ -14,7 +14,7 @@ const bookRouter = function() {
   const bookRepo = new BookMemoryRepository();
   const getBookService = new GetBookService(bookRepo);
   const editBookService = new EditBookService(bookRepo, getBookService);
-  const removeBookService = new RemoveBookService(bookRepo);
+  const removeBookService = new RemoveBookService(bookRepo, getBookService);
   const createBookService = new CreateBookService(bookRepo);
   const bookController = new BooksController(getBookService, editBookService, removeBookService, createBookService);
 

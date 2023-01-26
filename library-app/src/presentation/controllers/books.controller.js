@@ -1,7 +1,11 @@
+const NotFoundError = require( "../../utils/errors/errors/not-found.error" );
 const CreateBookUseCase = require( "../../domain/ports/in/book/use-case/create-book.use-case" );
 const EditBookUseCase = require( "../../domain/ports/in/book/use-case/edit-book.use-case" );
 const GetBookUseCase = require( "../../domain/ports/in/book/use-case/get-book.use-case" )
 const RemoveBookUseCase = require( "../../domain/ports/in/book/use-case/remove-book.use-case" );
+const HTTPApiNotFoundError = require( "../../utils/errors/api-errors/http-api-not-found-error" );
+const HTTPApiBaseError = require( "../../utils/errors/api-errors/http-api-base-error" );
+const HTTPStatusCodes = require( "../../utils/http-status-codes/http-status-codes" );
 
 class BooksController {
   #getBooksUseCase = new GetBookUseCase()
@@ -17,8 +21,17 @@ class BooksController {
   }
 
   async getBookByID(req) {
-    const { id } = req.params
-    return this.#getBooksUseCase.getBookByID(id);
+    try {
+      const { id } = req.params
+      const res = await this.#getBooksUseCase.getBookByID(id);
+      return res;
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        throw new HTTPApiNotFoundError(err.name);
+      }
+
+      throw new HTTPApiBaseError(err.name, err.message, HTTPStatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async getBookList(req) {
@@ -27,13 +40,33 @@ class BooksController {
   }
 
   async editBookByID(req) {
-    const [book, id] = [req.body, req.params.id];
-    return this.#editBookUseCase.editBookByID(id, book);
+    try {
+      const [book, id] = [req.body, req.params.id];
+      const res = await this.#editBookUseCase.editBookByID(id, book);
+      return res;
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        throw new HTTPApiNotFoundError(err.name);
+      }
+
+      throw new HTTPApiBaseError(err.name, err.message, HTTPStatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async removeBookByID(req) {
-    const id = req.params.id;
-    return this.#removeBookUseCase.removeBookByID(id);
+    try {
+      const id = req.params.id;
+      const result = await this.#removeBookUseCase.removeBookByID(id);
+      if (!result) {
+        throw new Error('Failed to delete book');
+      }
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        throw new HTTPApiNotFoundError(err.name);
+      }
+
+      throw new HTTPApiBaseError(err.name, err.message, HTTPStatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async createBook(req) {

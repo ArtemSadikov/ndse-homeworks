@@ -33,7 +33,7 @@ class BookMemoryRepository extends BookRepositoryPort {
   }
 
   async getList(pagination) {
-    return this.#books.slice(pagination.skip, pagination.limit);
+    return this.#books.slice(pagination.skip, pagination.skip + pagination.limit);
   }
 
   async editBookByID(id, book) {

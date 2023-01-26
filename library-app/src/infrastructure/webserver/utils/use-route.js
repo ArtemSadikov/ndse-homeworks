@@ -1,7 +1,15 @@
+const HTTPStatusCodes = require( "../../../utils/http-status-codes/http-status-codes" );
+
 const useRoute = method => async (req, res, next) => {
   try {
     const response = await method(req, res);
-    res.send({ data: response });
+    if (res.statusCode === undefined) {
+      res.status(HTTPStatusCodes.OK);
+    }
+    res.send({
+      statusCode: res.statusCode,
+      data: response,
+    });
   } catch (err) {
     next(err);
   }
