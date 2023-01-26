@@ -6,6 +6,7 @@ const RemoveBookUseCase = require( "../../domain/ports/in/book/use-case/remove-b
 const HTTPApiNotFoundError = require( "../../utils/errors/api-errors/http-api-not-found-error" );
 const HTTPApiBaseError = require( "../../utils/errors/api-errors/http-api-base-error" );
 const HTTPStatusCodes = require( "../../utils/http-status-codes/http-status-codes" );
+const getPagination = require( "../../utils/pagination/pagination" );
 
 class BooksController {
   #getBooksUseCase = new GetBookUseCase()
@@ -35,7 +36,7 @@ class BooksController {
   }
 
   async getBookList(req) {
-    const pagination = req.query;
+    const pagination = getPagination(req.query);
     return this.#getBooksUseCase.getBooksList(pagination);
   }
 
