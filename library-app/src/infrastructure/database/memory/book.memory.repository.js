@@ -77,7 +77,7 @@ class BookMemoryRepository extends BookRepositoryPort {
   async removeBookByID(id) {
     const oldLength = this.#books;
     this.#books = this.#books.filter(b => b.id !== id);
-    return oldLength === this.#books.length;
+    return oldLength !== this.#books.length;
   }
 
   async createBook(book) {

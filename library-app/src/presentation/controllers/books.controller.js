@@ -63,6 +63,7 @@ class BooksController {
       if (!result) {
         throw new Error('Failed to delete book');
       }
+      return 'OK';
     } catch (err) {
       if (err instanceof NotFoundError) {
         throw new HTTPApiNotFoundError(err.name);
