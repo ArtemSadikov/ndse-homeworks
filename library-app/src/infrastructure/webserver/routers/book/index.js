@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
-const useRoute = require('../utils/use-route');
+const useRoute = require('../../utils/use-route');
 
-const GetBookService = require( '../../../domain/use-case/book/get-book.service' );
-const BooksController = require( '../../../presentation/controllers/books.controller' );
-const BookMemoryRepository = require( '../../database/memory/book.memory.repository' );
-const EditBookService = require( '../../../domain/use-case/book/edit-book.service' );
-const RemoveBookService = require( '../../../domain/use-case/book/remove-book.service' );
-const CreateBookService = require( '../../../domain/use-case/book/create-book.service' );
+const GetBookService = require( '../../../../domain/use-case/book/get-book.service' );
+const BooksController = require( '../../../../presentation/controllers/books.controller' );
+const BookMemoryRepository = require( '../../../database/memory/book.memory.repository' );
+const EditBookService = require( '../../../../domain/use-case/book/edit-book.service' );
+const RemoveBookService = require( '../../../../domain/use-case/book/remove-book.service' );
+const CreateBookService = require( '../../../../domain/use-case/book/create-book.service' );
 
 
 const bookRouter = function() {
